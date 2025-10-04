@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wind32xp | Portfolio</title>
+<link rel="icon" type="image/png" href="assets/logo_landcraft.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -18,7 +19,7 @@
 
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto', sans-serif; }
   body {
-    height:100vh;
+    min-height:100vh;
     overflow-x:hidden;
     background: linear-gradient(135deg, var(--bg1), var(--bg2));
     color: var(--text-color);
@@ -93,21 +94,28 @@
   }
   footer a { color: var(--accent2); text-decoration:none; font-weight:600; }
 
-  /* Language Selector */
-  #lang-selector {
-    position: fixed; top:20px; right:20px;
-    background: var(--card-bg);
-    border:none;
-    border-radius:14px;
-    padding:10px 15px;
-    font-weight:600;
-    color:#fff;
-    cursor:pointer;
-    backdrop-filter: blur(8px);
-    transition:0.3s;
-    font-size:1em;
+  /* Language buttons */
+  #lang-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
   }
-  #lang-selector:hover { transform: scale(1.05); box-shadow:0 0 12px var(--accent1); }
+  .lang-btn {
+    background: rgba(26,31,39,0.6);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    font-weight: 600;
+    transition: 0.3s;
+  }
+  .lang-btn:hover { transform: scale(1.1); box-shadow: 0 0 12px var(--accent1);}
+  .lang-btn.active { background: var(--accent1); color:#fff; }
 
   /* Animations */
   @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
@@ -121,12 +129,12 @@
 <!-- Loader -->
 <div id="loader">Loading portfolio...</div>
 
-<!-- Language Selector -->
-<select id="lang-selector">
-  <option value="en" selected>English</option>
-  <option value="es">Español</option>
-  <option value="eu">Euskera</option>
-</select>
+<!-- Language buttons -->
+<div id="lang-buttons">
+  <button data-lang="en" class="lang-btn active">EN</button>
+  <button data-lang="es" class="lang-btn">ES</button>
+  <button data-lang="eu" class="lang-btn">EU</button>
+</div>
 
 <header>
   <h1 id="header-title">Wind32xp</h1>
@@ -204,17 +212,23 @@ const translations = {
   }
 };
 
-document.getElementById("lang-selector").addEventListener("change", e=>{
-  const lang=e.target.value;
-  document.getElementById("header-desc").innerText=translations[lang].headerDesc;
-  document.getElementById("projects-title").innerText=translations[lang].projectsTitle;
-  document.getElementById("proj1-link").innerText=translations[lang].proj1Link;
-  document.getElementById("proj2-link").innerText=translations[lang].proj2Link;
-  document.getElementById("proj3-link").innerText=translations[lang].proj3Link;
-  document.getElementById("proj4-link").innerText=translations[lang].proj4Link;
-  document.getElementById("contact-title").innerText=translations[lang].contactTitle;
-  document.getElementById("contact-discord").innerText=translations[lang].contactDiscord;
-  document.getElementById("contact-email").innerText=translations[lang].contactEmail;
+const buttons = document.querySelectorAll(".lang-btn");
+buttons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const lang = btn.dataset.lang;
+    buttons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    
+    document.getElementById("header-desc").innerText = translations[lang].headerDesc;
+    document.getElementById("projects-title").innerText = translations[lang].projectsTitle;
+    document.getElementById("proj1-link").innerText = translations[lang].proj1Link;
+    document.getElementById("proj2-link").innerText = translations[lang].proj2Link;
+    document.getElementById("proj3-link").innerText = translations[lang].proj3Link;
+    document.getElementById("proj4-link").innerText = translations[lang].proj4Link;
+    document.getElementById("contact-title").innerText = translations[lang].contactTitle;
+    document.getElementById("contact-discord").innerText = translations[lang].contactDiscord;
+    document.getElementById("contact-email").innerText = translations[lang].contactEmail;
+  });
 });
 
 // Play entry sound
@@ -239,5 +253,6 @@ document.addEventListener("mousemove", e=>{
   document.body.style.background=`linear-gradient(${135+y}deg, var(--bg1), var(--bg2))`;
 });
 </script>
+
 </body>
 </html>
